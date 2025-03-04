@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="normalize.css" media="screen">
+    <link rel="stylesheet" href="resets.css" media="screen">
+    <link rel="stylesheet" href="styles.css" media="screen">
+    <title>Online CV</title>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <h1 style="font-weight: normal; font-size: 16px;">I am header with an unordered list of hyperlinks</h1>
+        <nav>
+            <ul class="nav">
+                <li><a href="#about">About</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#contact">Contact</a></li>
+                </ul>
+        </nav>
+    </header>
+
+    <!-- Image Section -->
+    <section style="margin-left: 25px;">
+        <img src="./images/handsome.jpg" alt="" width="200">
+        <p>I am an image and I'm all by myself</p>
+    </section>
+    <div class="page-content">
+        <p>I am division with class equal to page-content that encloses all other division elements below</p>
+
+    <!-- Main Content Section -->
+    <div class="page-content">
+        <div class="card" id="about">
+        <p class="card-header">About</p>
+        <p class="card-body">Hello! Tell us about yourself.</p>
+        </div>
+        <div class="card" id="education">
+        <p class="card-header">Education</p>
+        <p class="card-body">Tell us about your education</p>
+        </div>
+        <div class="card" id="skills">
+        <p class="card-header">Skills</p>
+        <p class="card-body">Tell us about your IT Skills
+        </div>
+        <div class="card" id="portfolio">
+        <p class="card-header">Portfolio</p>
+        <input type="text" id="searchBar" placeholder="Search for a subject..." oninput="filterCourses()">
+        <h2 class="h2course">Courses Taken:</h2>
+        <ul id="course-list"></ul>
+        </div>
+        <div class="card" id="contact">
+            <p class="card-header">Contact</p>
+            <p class="card-body">Contact me</p>
+            </div>
+        </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>I am a footer, the last section of this page</p>
+    </footer>
+
+
+
+<script>
+    let coursesData = []; // Global variable to store all courses
+
+document.addEventListener("DOMContentLoaded", function() {
+    fetch('https://antoniosoldevillo.github.io/courses.json/courses.json')  
+        .then(response => response.json())
+        .then(data => {
+            coursesData = data.courses; // Store all courses for filtering later
+            displayCourses(coursesData); // Initially display all courses
+        })
+        .catch(error => {
+            console.error('Error loading courses:', error);
+            document.getElementById('course-list').innerHTML = 'Failed to load courses.';
+        });
+});
+
+function displayCourses(courses) {
+    const courseList = document.getElementById('course-list');
+    courseList.innerHTML = ''; // Clear the list before displaying
+
+    courses.forEach(course => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${course.year_level} Year, ${course.sem} Sem - ${course.code}: ${course.description} (${course.credit} credits)`;
+        courseList.appendChild(listItem);
+    });
+}
+
+function filterCourses() {
+    const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+    const filteredCourses = coursesData.filter(course => 
+        course.description.toLowerCase().includes(searchTerm) // Check if description contains the search term
+    );
+    displayCourses(filteredCourses); // Re-display with filtered courses
+}
+
+</script>
+
+</body>
+</html>
